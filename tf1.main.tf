@@ -81,7 +81,7 @@ resource "azurerm_network_interface" "vm" {
     public_ip_address_id          = azurerm_public_ip.vm.id
   }
 }
-
+ 
 # Associar o NSG à interface de rede
 resource "azurerm_network_interface_security_group_association" "vm" {
   network_interface_id      = azurerm_network_interface.vm.id
