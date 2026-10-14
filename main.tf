@@ -11,17 +11,16 @@ provider "azurerm" {
   features {}
 }
 
-# O Resource Group continua sendo um recurso existente no Azure.
 data "azurerm_resource_group" "lab" {
   name = "github-terraform"
 }
 
 # ============================================================
-# REDE VIRTUAL E SUBNET — GERENCIADAS PELO TERRAFORM
+# REDE VIRTUAL E SUBNET
 # ============================================================
 
 resource "azurerm_virtual_network" "lab" {
-  name                = "github-terraform-vnet"
+  name                = "github-terraform-vnet" # Nome alterado
   location            = data.azurerm_resource_group.lab.location
   resource_group_name = data.azurerm_resource_group.lab.name
   address_space       = ["10.10.0.0/16"]
@@ -39,7 +38,7 @@ resource "azurerm_subnet" "default" {
 # ============================================================
 
 resource "azurerm_network_security_group" "vm" {
-  name                = "github-terraform-TF-nsg"
+  name                = "github-terraform-nsg" # Nome alterado
   location            = data.azurerm_resource_group.lab.location
   resource_group_name = data.azurerm_resource_group.lab.name
 
@@ -55,8 +54,6 @@ resource "azurerm_network_security_group" "vm" {
     destination_address_prefix = "*"
   }
 
-  # Mantida para administração quando a rede permitir SSH.
-  # Na Fatec, o acesso SSH pode continuar bloqueado pela rede local.
   security_rule {
     name                       = "SSH"
     priority                   = 1001
@@ -75,7 +72,7 @@ resource "azurerm_network_security_group" "vm" {
 # ============================================================
 
 resource "azurerm_public_ip" "vm" {
-  name                = "github-terraform-TF-ip"
+  name                = "github-terraform-ip" # Nome alterado
   location            = data.azurerm_resource_group.lab.location
   resource_group_name = data.azurerm_resource_group.lab.name
   allocation_method   = "Static"
@@ -87,7 +84,7 @@ resource "azurerm_public_ip" "vm" {
 # ============================================================
 
 resource "azurerm_network_interface" "vm" {
-  name                = "github-terraform-TF-nic"
+  name                = "github-terraform-nic" # Nome alterado
   location            = data.azurerm_resource_group.lab.location
   resource_group_name = data.azurerm_resource_group.lab.name
 
@@ -105,11 +102,11 @@ resource "azurerm_network_interface_security_group_association" "vm" {
 }
 
 # ============================================================
-# MÁQUINA VIRTUAL — DOCKER INSTALADO PELO CLOUD-INIT
+# MÁQUINA VIRTUAL
 # ============================================================
 
 resource "azurerm_linux_virtual_machine" "vm" {
-  name                = "github-terraform-TF"
+  name                = "github-terraform-vm" # Nome alterado
   resource_group_name = data.azurerm_resource_group.lab.name
   location            = data.azurerm_resource_group.lab.location
   size                = "Standard_B2ats_v2"
@@ -126,8 +123,6 @@ resource "azurerm_linux_virtual_machine" "vm" {
     public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDC6jsBFaxcs+eUbsbFdQMRdhuGQYV5g/BD/zhkiHE/g52mV1m2KjtODC47h3J0k+k9V0bewYA5+GNrvxngD4J3rbHhIRCHjNv4DbJqGljnSALeAUj16bxjZeL2nuJjgCjbIGUwNtH5G8y31vHZDCEJtM80a5KYWuy5ziM++UQi2DHTqErzsSYVtjII+OD4tZil3sa+hM5X1CN/ol9CytXxinvGfVKttLXnjY3LZQ1GxitYOoTujnGz5sPGtr7rxdlQJsR+OLJr7G66j2VV0PeaxDYL2JN2bWwdUUQbuFLlJH+ey0598vDnfYLKhYZZIBIOkphqsL99evX9ZgQExkhaDySJFwMZEHjcdBVbrlCsL9kcp/W/v2ecupPJewh/IMK60I0wAGuOgo+kRJF+r/LA1fcRjmZ58YsLx3wCC8cQtVuEriWY2/SZY1OvRXbep+cj+33Lj9X139mIp0MyFMRJURAI4kax8xLW4Hlf6AFKkd9Fk+S0W2qNrYkTv/zxy1U= imported-openssh-key"
   }
 
-  # O Azure executa este script na primeira inicialização da VM.
-  # A instalação pode continuar por alguns minutos após a VM ficar disponível.
   custom_data = base64encode(<<-CLOUDCONFIG
     #cloud-config
     package_update: true
