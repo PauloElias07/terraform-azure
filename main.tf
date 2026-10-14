@@ -13,7 +13,7 @@ provider "azurerm" {
 
 # O Resource Group continua sendo um recurso existente no Azure.
 data "azurerm_resource_group" "lab" {
-  name = "LinuxTeste"
+  name = "github-terraform"
 }
 
 # ============================================================
