@@ -21,7 +21,7 @@ data "azurerm_resource_group" "lab" {
 # ============================================================
 
 resource "azurerm_virtual_network" "lab" {
-  name                = "LinuxTeste-vnet"
+  name                = "github-terraform-vnet"
   location            = data.azurerm_resource_group.lab.location
   resource_group_name = data.azurerm_resource_group.lab.name
   address_space       = ["10.10.0.0/16"]
@@ -39,7 +39,7 @@ resource "azurerm_subnet" "default" {
 # ============================================================
 
 resource "azurerm_network_security_group" "vm" {
-  name                = "LinuxTeste-TF-nsg"
+  name                = "github-terraform-TF-nsg"
   location            = data.azurerm_resource_group.lab.location
   resource_group_name = data.azurerm_resource_group.lab.name
 
@@ -75,7 +75,7 @@ resource "azurerm_network_security_group" "vm" {
 # ============================================================
 
 resource "azurerm_public_ip" "vm" {
-  name                = "LinuxTeste-TF-ip"
+  name                = "github-terraform-TF-ip"
   location            = data.azurerm_resource_group.lab.location
   resource_group_name = data.azurerm_resource_group.lab.name
   allocation_method   = "Static"
@@ -87,7 +87,7 @@ resource "azurerm_public_ip" "vm" {
 # ============================================================
 
 resource "azurerm_network_interface" "vm" {
-  name                = "LinuxTeste-TF-nic"
+  name                = "github-terraform-TF-nic"
   location            = data.azurerm_resource_group.lab.location
   resource_group_name = data.azurerm_resource_group.lab.name
 
@@ -109,7 +109,7 @@ resource "azurerm_network_interface_security_group_association" "vm" {
 # ============================================================
 
 resource "azurerm_linux_virtual_machine" "vm" {
-  name                = "LinuxTeste-TF"
+  name                = "github-terraform-TF"
   resource_group_name = data.azurerm_resource_group.lab.name
   location            = data.azurerm_resource_group.lab.location
   size                = "Standard_B2ats_v2"
